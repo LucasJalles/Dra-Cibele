@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria & Bastidores | CS Monteiro Advocacia</title>
+  <link rel="icon" href="imagens/logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* ===== HEADER MODERNO ===== */
+    .elegant-header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .elegant-header.scrolled {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .modern-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+    }
+
+    .brand-logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .brand-logo img:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-info h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin: 0;
+    }
+
+    .brand-info p {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .modern-menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+      color: var(--gray-700);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0%;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .highlight-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white !important;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
+
+    .highlight-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .modern-menu {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .mobile-menu-btn span {
+        width: 24px;
+        height: 2px;
+        background-color: var(--gray-800);
+      }
+    }
+
+    /* ===== GALERIA ===== */
+    .gallery-section {
+      padding: var(--section-padding);
+      background: var(--gray-50);
+      margin-top: 120px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .gallery-card {
+      background: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .gallery-card:hover img {
+      filter: brightness(0.8);
+    }
+
+    .gallery-card .caption {
+      padding: 1.2rem;
+      text-align: center;
+      font-weight: 500;
+      color: var(--gray-800);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-xl);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-caption {
+      color: var(--white);
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <div class="logo">
+                        <img src="imagens/logo.png" alt="">
+                    </div>
+                    <div class="brand-text">
+                        <h1> CS Monteiro Advocacia</h1>
+                        <p>Assessoria & Consultoria Jurídica</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Início</a></li>
+                    <li><a href="index.html" class="nav-link">Sobre</a></li>
+                    <li><a href="index.html" class="nav-link">Serviços</a></li>
+                    <li><a href="galeria.html" class="nav-link">Galeria</a></li>
+                    <li><a href="index.html" class="nav-link">Contato</a></li>
+                </ul>
+                
+                <a href="#contato" class="cta-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    Fale Agora
+                </a>
+            </div>
+        </nav>
+  </header>
+
+  <!-- GALERIA -->
+  <section class="gallery-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Galeria & Bastidores</h2>
+        <p class="section-subtitle">Conheça um pouco da nossa equipe e estrutura</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-card" data-caption="Decoração">
+          <img src="imagens/galeria/Decoração estatua.jpg" alt="Decoração">
+          <div class="caption">Decoração</div>
+        </div>
+        
+        <div class="gallery-card" data-caption="Dra. Cibele Monteiro">
+          <img src="imagens/Cibelly.jpg" alt="Dra. Cibele Monteiro">
+          <div class="caption">Dra. Cibele Monteiro</div>
+        </div>
+        <div class="gallery-card" data-caption="Lançamento de Livro">
+          <img src="imagens/galeria/Lançamento de livro.png" alt="Lançamento de Livro">
+          <div class="caption">Lançamento de Livro</div>
+        </div>
+        <div class="gallery-card" data-caption="Curso Concluído no Exterior">
+          <img src="imagens/galeria/Curso.png" alt="Curso Concluído no Exterior">
+          <div class="caption">Curso Concluído no Exterior</div>
+        </div>
+        <div class="gallery-card" data-caption="Ética e Compromisso Sempre">
+          <img src="imagens/galeria/Etica.jpg" alt="Ética e Compromisso Sempre">
+          <div class="caption">Ética e Compromisso Sempre</div>
+        </div>
+        <div class="gallery-card" data-caption="A Prioridade é Atender o Cliente de Forma Imediata.">
+          <img src="imagens/galeria/Sala de atendimentoo.png" alt="Sala Atendimento">
+          <div class="caption">Sala Atendimento</div>
+        </div>
+        <div class="gallery-card" data-caption="UERJ">
+          <img src="imagens/galeria/UERJ.png" alt="UERJ">
+          <div class="caption">UERJ</div>
+        </div>
+        <div class="gallery-card" data-caption="">
+          <img src="imagens/galeria/Decoração cafe.png" alt="Cantinho do Café">
+          <div class="caption"></div>
+        </div>
+        <div class="gallery-card" data-caption="Evento">
+          <img src="imagens/galeria/Evento.png" alt="Evento">
+          <div class="caption">Evento</div>
+        </div>
+        <div class="gallery-card" data-caption="Atendimento 24 horas">
+          <img src="imagens/galeria/Atendimento 24 horas.png" alt="Atendimento 24 horas">
+          <div class="caption">Atendimento 24 horas</div>
+        </div>
+        <div class="gallery-card" data-caption="Priorizando o Melhor Para o Cliente Sempre.">
+          <img src="imagens/galeria/Sala reuniao.png" alt="Sala de Reunião">
+          <div class="caption">Sala de Reunião</div>
+        </div>
+        <div class="gallery-card" data-caption="Direito Internacional.">
+          <img src="imagens/galeria/Direito Internacional.png" alt="Direito Internacional.">
+          <div class="caption">Direito Internacional</div>
+        </div>
+        <div class="gallery-card" data-caption="5G Digital">
+          <img src="imagens/galeria/5g.jpg" alt="5G Digital">
+          <div class="caption">5G Digital</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="modal-img">
+    <div class="modal-caption" id="modal-caption"></div>
+  </div>
+
+  <script>
+    // Modal da Galeria
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalCaption = document.getElementById('modal-caption');
+    const closeBtn = document.querySelector('.modal-close');
+
+    document.querySelectorAll('.gallery-card').forEach(card => {
+      card.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        modalImg.src = card.querySelector('img').src;
+        modalCaption.textContent = card.dataset.caption;
+      });
+    });
+
+    closeBtn.onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  </script>
+  <script src="script.js"></script>
+
+</body>
+</html>
